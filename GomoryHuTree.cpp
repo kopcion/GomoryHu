@@ -1,6 +1,7 @@
+/*
 #include "GomoryHuTree.h"
 
-GomoryHuTree::GomoryHuTree(vertex& vertices, vector<vector<int> >& graph, MinCutFunc func){
+GomoryHuTree::GomoryHuTree(vertex& vertices, vector<vector<int> >& graph, MinCutFunc* func){
     queue<set<int> > queue;
     vector<pair<vertex&, set<Edge, EdgeComparator>>> tmpGraph(vertices.size());
 
@@ -19,7 +20,7 @@ GomoryHuTree::GomoryHuTree(vertex& vertices, vector<vector<int> >& graph, MinCut
         vertex S2;
 
         Edge edge;
-        func.minCut(graph, top, S1, edge, s, t);
+//        func->minCut(graph, top, S1, edge, s, t);
         splitNode(tmpGraph, top, S1, S2, edge);
     }
 
@@ -71,3 +72,4 @@ void GomoryHuTree::splitNode(vector<pair<vertex&, set<Edge, EdgeComparator>>>& g
 }
 
 void GomoryHuTree::createTree(vector<pair<vertex&, set<Edge, EdgeComparator>>>& tmpGraph){}
+*/

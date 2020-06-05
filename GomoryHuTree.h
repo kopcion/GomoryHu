@@ -13,14 +13,18 @@
 #include "MinCuts/MinCutFunc.h"
 #include "utils.h"
 
-
 using namespace std;
+
+/*
+ * For any edge u,v with capacity c in Input Graph, there is edge v,u with capacity >= 0
+ * */
+
 class GomoryHuTree {
 public:
-    GomoryHuTree(set<int>& vertices, vector<vector<int> >& graph, MinCutFunc func);
+    GomoryHuTree(set<int>& vertices, vector<vector<int> >& graph, MinCutFunc* func){}
 private:
-    void createTree(vector<pair<vertex&, set<Edge, EdgeComparator>>>& tmpGraph);
-    void splitNode(vector<pair<vertex&, set<Edge, EdgeComparator>>>& tmpGraph, vertex& top, vertex& S1, vertex& S2, Edge& edge);
+    void createTree(vector<pair<vertex&, set<Edge, EdgeComparator>>>& tmpGraph){}
+    void splitNode(vector<pair<vertex&, set<Edge, EdgeComparator>>>& tmpGraph, vertex& top, vertex& S1, vertex& S2, Edge& edge){}
 
     vector<vector<int> > tree;
 };

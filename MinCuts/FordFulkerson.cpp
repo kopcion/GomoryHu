@@ -4,70 +4,64 @@
 
 #include "FordFulkerson.h"
 
-int FordFulkerson::minCut(vector<vector<int>> &graph, set<int> &S1, set<int> &S2, Edge& edge, int s, int t) {
+int FordFulkerson::minCut(vector<unordered_map<int,int>> &graph, int s, int t) {
+    _graph = graph;
+    source = s;
+    target = t;
     int u, v, out = 0;
 
-    residualG = Graph;
-
-    path.resize(Graph.size());
+    path.resize(graph.size());
 
     while (bfs()) {
         int capacity = INT32_MAX;
 
-        v = Graph.size() - 1;
-        u = path[v];
-        while (v) {
-            capacity = min(capacity, residualG[u][v]);
-            v = path[v];
+        v = target;
+        while(v!=source){
             u = path[v];
+            capacity = min(capacity, _graph[u][v]);
+            v=path[v];
         }
 
-        v = Graph.size() - 1;
-        u = path[v];
-        while (v) {
-            residualG[u][v] -= capacity;
-            residualG[v][u] += capacity;
-            v = path[v];
+        v = target;
+        while(v != source){
             u = path[v];
+            _graph[u][v] -= capacity;
+            _graph[v][u] += capacity;
+            v=path[v];
         }
 
         out += capacity;
     }
 
-    vector<bool> visited(graph.size(), false);
-    dfs(residualG, s, visited);
-
-    for(int i=0; i < graph.size(); i++){
-        if(visited[i]) S2.insert(i);
-    }
+    return out;
 }
 
-void FordFulkerson::dfs(vector<vector<int>>& rGraph, int v, vector<bool>& visited){
-    visited[v] = true;
-    for (int i = 0; i < rGraph[v].size(); i++)
-        if (rGraph[v][i] && !visited[i])
-            dfs(rGraph, i, visited);
+void FordFulkerson::dfs(int vertex, vector<bool>& visited){
+    visited[vertex] = true;
+    for (auto v : _graph[vertex])
+        if (!visited[v.first] && v.second)
+            dfs(v.first, visited);
 }
 
 bool FordFulkerson::bfs(){
-    vector<bool> visited(residualG.size(), false);
+    vector<bool> visited(_graph.size(), false);
     queue<int> queue;
 
-    queue.push(0);
-    visited[0] = true;
-    path[0] = -1;
+    queue.push(source);
+    visited[source] = true;
+    path[source] = -1;
 
     while(!queue.empty()){
         int u = queue.front(); queue.pop();
 
-        for(int v=0; v < residualG[u].size(); v++){
-            if(!visited[v] && residualG[u][v] > 0){
-                queue.push(v);
-                path[v] = u;
-                visited[v] = true;
+        for(auto v : _graph[u]){
+            if(!visited[v.first] && v.second){
+                queue.push(v.first);
+                path[v.first] = u;
+                visited[v.first] = true;
             }
         }
     }
 
-    return visited[Graph.size()-1];
+    return visited[target];
 }

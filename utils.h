@@ -6,6 +6,8 @@
 #define GOMORYHU_UTILS_H
 
 #include <set>
+#include <unordered_map>
+#include <iostream>
 
 using namespace std;
 
@@ -20,6 +22,8 @@ struct EdgeComparator{
         return one.vertex < two.vertex;
     }
 };
+
+
 
 typedef set<int> vertex;
 

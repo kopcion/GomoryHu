@@ -11,13 +11,13 @@
 #include <queue>
 
 class FordFulkerson : public MinCutFunc {
-    int minCut(vector<vector<int> > &graph, set<int> &S1, set<int> &S2, Edge& edge, int s, int t) override;
-    void dfs(vector<vector<int>>& graph, int s, vector<bool>& visited);
-    bool bfs();
+public:
+    int minCut(vector<unordered_map<int,int> >&, int, int);
 
 private:
-    vector<vector<int> > Graph;
-    vector<vector<int> > residualG;
+    void dfs(int, vector<bool>&);
+    bool bfs();
+
     vector<int> path;
 };
 

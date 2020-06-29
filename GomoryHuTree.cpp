@@ -1,75 +1,42 @@
-/*
+
+
+
 #include "GomoryHuTree.h"
 
-GomoryHuTree::GomoryHuTree(vertex& vertices, vector<vector<int> >& graph, MinCutFunc* func){
-    queue<set<int> > queue;
-    vector<pair<vertex&, set<Edge, EdgeComparator>>> tmpGraph(vertices.size());
+GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> >& graph, MinCutFunc* func){
+    vector<int> superNodes(graph.size(), 1);
+    priority_queue<pair<int,int> > treeNodes;
+    treeNodes.push(pair<int,int>(graph.size(), 1));
+    vector<unordered_map<int,int> > contractedGraph;
 
-    tmpGraph[*vertices.upper_bound(-1)].first = vertices;
-    queue.push(vertices);
+    while(cutTree.size() < graph.size()){
+        auto X = treeNodes.top(); treeNodes.pop();
 
-    //gomory hu tree will have n vertices, id of set of vertices is id of smallest vertex
-    while(!queue.empty()){
-        vertex& top = queue.front(); queue.pop();
-        if(top.size() == 1) continue;
-
-        auto it = top.begin();
-        int s = *(it++);
-        int t  = *it;
-        vertex S1;
-        vertex S2;
-
-        Edge edge;
-//        func->minCut(graph, top, S1, edge, s, t);
-        splitNode(tmpGraph, top, S1, S2, edge);
+        constructContracted(X.second, X.first, contractedGraph, graph, superNodes);
     }
-
-    createTree(tmpGraph);
 }
 
-void GomoryHuTree::splitNode(vector<pair<vertex&, set<Edge, EdgeComparator>>>& graph, vertex& top, vertex& S1, vertex& S2, Edge& edge) {
-    //fill S2
-    for (auto x : top) {
-        if (S1.find(x) != top.end()) continue;
+void GomoryHuTree::constructContracted(int root, int size, vector<unordered_map<int,int> >& contractedGraph, vector<unordered_map<int,int> >& graph, vector<int>& superNodes){
+    vector<int> component(cutTree.size(), 0);
+    int components = dfsUtil(root, component);
 
-        S2.insert(x);
-    }
-
-    set<Edge, EdgeComparator> S1Neighbours;
-    set<Edge, EdgeComparator> S2Neighbours;
-    edge.vertex = *S2.begin();
-    S1Neighbours.insert(edge);
-    edge.vertex = *S1.begin();
-    S2Neighbours.insert(edge);
-
-    //for each neigbour of top vertex, decide if its S1 or S2
-    for (auto neighbour : graph[*top.begin()].second) {
-        if (S1.count((*neighbour.subEdges.begin()).first) || S1.count((*neighbour.subEdges.begin()).second)) {
-            S1Neighbours.insert(neighbour);
+    vector<int> vertexMapping(graph.size());
+    int id = 0;
+    for(int i=0; i < graph.size(); ++i){
+        if(superNodes[i] != root){
+            vertexMapping[i] = superNodes[i];
         } else {
-            S2Neighbours.insert(neighbour);
+            vertexMapping[i] = components + id++;
         }
     }
-    graph[*S1.begin()].second = move(S1Neighbours);
-    graph[*S2.begin()].second = move(S2Neighbours);
-    
-    //update vertex of S1, S2
-    Edge tmpEdge = {.vertex = *top.begin()};
-    if(*top.begin() == *S1.begin()){
-        for (auto neighbour : graph[*S2.begin()].second){
-            Edge tmp = *graph[neighbour.vertex].second.find(tmpEdge);
-            graph[neighbour.vertex].second.erase(tmpEdge);
-            graph[neighbour.vertex].second.insert(tmp);
-        }
-    } else {
-        for (auto neighbour : graph[*S1.begin()].second){
-            Edge tmp = *graph[neighbour.vertex].second.find(tmpEdge);
-            graph[neighbour.vertex].second.erase(tmpEdge);
-            graph[neighbour.vertex].second.insert(tmp);
-        }
-    }
-        
-}
+    contractedGraph.clear();
+    contractedGraph.resize(components + size);
 
-void GomoryHuTree::createTree(vector<pair<vertex&, set<Edge, EdgeComparator>>>& tmpGraph){}
-*/
+    for(int i=0; i < graph.size(); ++i){
+        for(auto u : graph[i]) {
+            if (superNodes[i] == superNodes[u.first] && superNodes[i] != root) continue;
+
+            contractedGraph[vertexMapping[i]][vertexMapping[u.first]] += u.second;
+        }
+    }
+}

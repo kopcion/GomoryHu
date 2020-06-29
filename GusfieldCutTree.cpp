@@ -15,12 +15,12 @@ GusfieldCutTree::GusfieldCutTree(vector<unordered_map<int,int> >& graph, MinCutF
 
     //calculate
     for(int source=2; source < graph.size(); ++source){
-        printGraph();
+//        printGraph();
         int target = cutTree[source].begin()->first;
-        cout<<"considering pair "<<source<<" "<<target<<endl;
+//        cout<<"considering pair "<<source<<" "<<target<<endl;
 
         int capacity = func->minCut(graph, source, target);
-        cout<<"\nminCut with value "<<capacity<<"\n\n";
+//        cout<<"\nminCut with value "<<capacity<<"\n\n";
         cutTree[source][target] = capacity;
         cutTree[target][source] = capacity;
 
@@ -36,7 +36,7 @@ GusfieldCutTree::GusfieldCutTree(vector<unordered_map<int,int> >& graph, MinCutF
             }
         }
     }
-    printGraph();
+//    printGraph();
 }
 
 int GusfieldCutTree::getMinCut(int source, int target) {

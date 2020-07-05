@@ -24,16 +24,21 @@ GusfieldCutTree::GusfieldCutTree(vector<unordered_map<int,int> >& graph, MinCutF
         cutTree[source][target] = capacity;
         cutTree[target][source] = capacity;
 
+        queue<int> queue;
         set<int> sourceSide = func->getSourceSide();
         for(auto vertex : cutTree[target]){
             if(vertex.first == source) continue;
             if(sourceSide.find(vertex.first) != sourceSide.end()){
                 int tmp = cutTree[target][vertex.first];
-                cutTree[target].erase(vertex.first);
+                queue.push(vertex.first);
                 cutTree[vertex.first].erase(target);
                 cutTree[source][vertex.first] = tmp;
                 cutTree[vertex.first][source] = tmp;
             }
+        }
+        while(!queue.empty()){
+            cutTree[target].erase(queue.front());
+            queue.pop();
         }
     }
 //    printGraph();

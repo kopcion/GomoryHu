@@ -31,7 +31,7 @@ public:
 
     void transformTree(){
         vector<unordered_map<int, int> > newTree(cutTree.size());
-        for(int i=0; i < cutTree.size(); ++i){
+        for(int i=1; i < cutTree.size(); ++i){
             for(auto v : cutTree[i]){
                 newTree[superNodes[i]][superNodes[v.first]] = v.second;
             }

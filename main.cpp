@@ -48,7 +48,8 @@ int main(){
 
     for(int i=1; i < graph.size()-1;++i){
         for(int j=i+1; j< graph.size();++j){
-            cout<<"s,t: ("<<i<<" "<<j<<") "<<treee.getMinCut(i,j)<<" "<<tree2.getMinCut(i,j)<<endl;
+            vector<unordered_map<int,int> > g2 = graph;
+            cout<<"s,t: ("<<i<<" "<<j<<") "<<treee.getMinCut(i,j)<<" "<<tree2.getMinCut(i,j)<<" "<<cut3.minCut(g2,i, j)<<endl;
         }
     }
     return 0;

@@ -91,15 +91,10 @@ void GomoryHuTree::splitRoot(pair<int, int> X, int cut, set<int> &source, vector
     cutTree.emplace_back();
     cutTree[X.second][newNodeId] = cut;
     cutTree[newNodeId][X.second] = cut;
-//    printf("root: %d, %d, newNode: %d\n", X.second, X.first, newNodeId);
 
-//    cout<<"Source side: ";
     for(auto v : source){
         cout<<v<<" ";
     }cout<<endl;
-//    for(auto v : verticesInNodes[X.second]){
-//        cout<<v<<" ";
-//    }cout<<endl;
 
     queue<int> queue;
     for(auto v : verticesInNodes[X.second]){
@@ -137,7 +132,4 @@ void GomoryHuTree::splitRoot(pair<int, int> X, int cut, set<int> &source, vector
         queue.pop();
     }
 //    printGraph();
-//    for(int i=1; i < vertexMapping.size(); ++i){
-//        cout<<i<<" : "<<vertexMapping[i]<<endl;
-//    }
 }

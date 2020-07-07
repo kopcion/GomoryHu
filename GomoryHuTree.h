@@ -27,13 +27,14 @@ public:
         vector<bool> visited(cutTree.size(), false);
 
         return dfs(source, target, INT32_MAX, visited);
+//        return dfs(superNodes[source], superNodes[target], INT32_MAX, visited);
     }
 
     void transformTree(){
         vector<unordered_map<int, int> > newTree(cutTree.size());
         for(int i=1; i < cutTree.size(); ++i){
             for(auto v : cutTree[i]){
-                newTree[superNodes[i]][superNodes[v.first]] = v.second;
+                newTree[*verticesInNodes[i].begin()][*verticesInNodes[v.first].begin()] = v.second;
             }
         }
         cutTree = move(newTree);

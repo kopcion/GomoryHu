@@ -26,14 +26,14 @@ GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> >& graph, MinCutFunc* f
         vector<int> vertexMapping(graph.size());
 //        cout<<"constructContracted\n";
         constructContracted(X.second, X.first, contractedGraph, vertexMapping, graph, superNodes);
-        cout<<"done constructContracted\n";
-        int i=0;
-        for(auto vertex : contractedGraph){
-            cout<<"\tvertex: "<<i++<<endl;
-            for(auto edge : vertex){
-                cout<<"\tto: "<<edge.first<<" with cap: "<<edge.second<<endl;
-            }
-        }cout<<endl;
+//        cout<<"done constructContracted\n";
+//        int i=0;
+//        for(auto vertex : contractedGraph){
+//            cout<<"\tvertex: "<<i++<<endl;
+//            for(auto edge : vertex){
+//                cout<<"\tto: "<<edge.first<<" with cap: "<<edge.second<<endl;
+//            }
+//        }cout<<endl;
 
         int s, t, count = 0;
         for(int i=1; i < superNodes.size() && count < 2; ++i){
@@ -46,12 +46,14 @@ GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> >& graph, MinCutFunc* f
 
 
         int cut = func->minCut(contractedGraph, vertexMapping[s], vertexMapping[t]);
-        printf("Chosen root %d with size %d\n\tVertices: ", X.second, X.first);
-        printf("mincut: %d, (s,t) = (%d, %d)\n", cut, vertexMapping[s], vertexMapping[t]);
+        printf("Chosen root %d with size %d\n", X.second, X.first);
+//        printf("Chosen root %d with size %d\n\tVertices: ", X.second, X.first);
+        printf("mincut: %d, (s,t) = (%d, %d)\n", cut, s, t);
+//        printf("mincut: %d, (s,t) = (%d, %d)\n", cut, vertexMapping[s], vertexMapping[t]);
 
         set<int> source = func->getSourceSide();
         splitRoot(X, cut, source, superNodes, vertexMapping);
-        printGraph();
+//        printGraph();
     }
     transformTree();
 }
@@ -65,7 +67,7 @@ void GomoryHuTree::constructContracted(int root,
     vector<int> component(cutTree.size(), 0);
     int components = getComponents(root, component);
 
-    cout<<"\tcomponents "<<components<<endl;
+//    cout<<"\tcomponents "<<components<<endl;
     int id = 1;
     for(int i=1; i < graph.size(); ++i){
         if(superNodes[i] != root){
@@ -77,7 +79,7 @@ void GomoryHuTree::constructContracted(int root,
     contractedGraph.clear();
     contractedGraph.resize(components + size + 1);
 
-    for(int i=0; i < graph.size(); ++i){
+    for(int i=1; i < graph.size(); ++i){
         for(auto u : graph[i]) {
             if (vertexMapping[i] == vertexMapping[u.first] && superNodes[i] != root) continue;
 
@@ -94,7 +96,7 @@ void GomoryHuTree::splitRoot(pair<int, int> X, int cut, set<int> &source, vector
 
     for(auto v : source){
         cout<<v<<" ";
-    }cout<<endl;
+    } cout<<endl;
 
     queue<int> queue;
     for(auto v : verticesInNodes[X.second]){
@@ -102,6 +104,7 @@ void GomoryHuTree::splitRoot(pair<int, int> X, int cut, set<int> &source, vector
             queue.push(v);
         }
     }
+
     while(!queue.empty()){
         assert(verticesInNodes[X.second].erase(queue.front()) > 0);
         verticesInNodes[newNodeId].insert(queue.front());
@@ -110,8 +113,8 @@ void GomoryHuTree::splitRoot(pair<int, int> X, int cut, set<int> &source, vector
     }
     treeNodes.push(pair<int,int>(verticesInNodes[X.second].size(), X.second));
     treeNodes.push(pair<int,int>(verticesInNodes[newNodeId].size(), newNodeId));
-    printf("Pushing nodes (%d, %d) and (%d, %d), top of queue is node (%d, %d), size of queue %d\n", verticesInNodes[X.second].size(), X.second,
-           verticesInNodes[newNodeId].size(), newNodeId, treeNodes.top().first, treeNodes.top().second, treeNodes.size());
+//    printf("Pushing nodes (%d, %d) and (%d, %d), top of queue is node (%d, %d), size of queue %d\n", verticesInNodes[X.second].size(), X.second,
+//           verticesInNodes[newNodeId].size(), newNodeId, treeNodes.top().first, treeNodes.top().second, treeNodes.size());
 
     for(auto v : cutTree[X.second]){
         if(v.second == 0) {

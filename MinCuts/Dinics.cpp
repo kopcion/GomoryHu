@@ -12,8 +12,7 @@ int Dinics::minCut(vector<unordered_map<int,int> > &graph, int s, int t){
     vector<int> dist(graph.size(), -1); dist[source] = 0;
     vector<bool> visited(graph.size(), false);
     int output = 0;
-    int count = 3;
-    while(bfs(dist) && count--){
+    while(bfs(dist)){
         while(true) {
             visited.clear();
             visited.resize(_graph.size(), false);

@@ -14,6 +14,9 @@ using namespace std;
 class MinCutFunc {
 public:
     virtual int minCut(vector<unordered_map<int,int> >& graph, int s, int t) = 0;
+    void minCut(vector<unordered_map<int,int> >& graph, int s, int t, int* cut){
+        *cut = minCut(graph, s, t);
+    }
     set<int> getSourceSide() {
         vector<bool> visited(_graph.size(), false);
         queue<int> q;

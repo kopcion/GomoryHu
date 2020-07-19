@@ -21,13 +21,12 @@ using namespace std;
 
 class GomoryHuTree {
 public:
-    GomoryHuTree(vector<unordered_map<int,int> >&, MinCutFunc*);
+    GomoryHuTree(vector<unordered_map<int,int> >&, MinCutFunc**, int num);
 
     int getMinCut(int source, int target) {
         vector<bool> visited(cutTree.size(), false);
 
         return dfs(source, target, INT32_MAX, visited);
-//        return dfs(superNodes[source], superNodes[target], INT32_MAX, visited);
     }
 
     void transformTree(){
@@ -76,7 +75,6 @@ public:
     }
 
     int getComponents(int v, vector<int>& component){
-//        printGraph();
         vector<bool> visited(cutTree.size(), false);
         visited[v] = true;
         int compNo = 1;
@@ -98,6 +96,8 @@ public:
         }
     }
 
+    pair<int,int> getSourceTarget(int);
+
     void constructContracted(int, int, vector<unordered_map<int,int> >&, vector<int>&, vector<unordered_map<int,int> >&, vector<int>&);
 private:
     vector<int> superNodes;
@@ -105,7 +105,8 @@ private:
     unordered_map<int, set<int> > verticesInNodes;
     priority_queue<pair<int,int> > treeNodes;
 
-    //    int dfs(int, int, int, vector<bool>&);
+    int NUM_OF_THREADS;
+
     void splitRoot(pair<int, int>, int, set<int>&, vector<int>&, vector<int>&);
 };
 

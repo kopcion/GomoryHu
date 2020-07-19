@@ -2,9 +2,11 @@
 // Created by kopcion on 05.06.2020.
 //
 
+#include <thread>
 #include "GusfieldCutTree.h"
 
-GusfieldCutTree::GusfieldCutTree(vector<unordered_map<int,int> >& graph, MinCutFunc* func){
+GusfieldCutTree::GusfieldCutTree(vector<unordered_map<int,int> >& graph, MinCutFunc* func, int num = 1){
+    NUM_OF_THREADS = num;
     cutTree.resize(graph.size());
 
     //initialize
@@ -15,16 +17,14 @@ GusfieldCutTree::GusfieldCutTree(vector<unordered_map<int,int> >& graph, MinCutF
 
     //calculate
     for(int source=2; source < graph.size(); ++source){
-//        printGraph();
         int target = cutTree[source].begin()->first;
-//        cout<<"considering pair "<<source<<" "<<target<<endl;
+
 
         int capacity = func->minCut(graph, source, target);
-//        cout<<"\nminCut with value "<<capacity<<"\n\n";
         cutTree[source][target] = capacity;
         cutTree[target][source] = capacity;
 
-        queue<int> queue;
+        queue<int> queue;;
         set<int> sourceSide = func->getSourceSide();
         for(auto vertex : cutTree[target]){
             if(vertex.first == source) continue;

@@ -16,12 +16,15 @@ private:
     bool push(int);
     void relabel(int);
     void discharge();
+    void globalRelabel();
+    void dfs(int, vector<int>&);
 
     vector<unordered_map<int,int> > Flow;
     queue<int> overflowingVertices;
     vector<bool> isInQueue;
     vector<int> flow;
     vector<int> height;
+    int count;
 };
 
 

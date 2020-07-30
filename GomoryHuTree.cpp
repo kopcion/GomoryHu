@@ -10,7 +10,7 @@ vector<int> cutsValues;
 vector<set<int> > cutsDivisions;
 
 
-GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> >& graph, MinCutFunc** func, int num){
+GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> > graph, MinCutFunc** func, int num){
     NUM_OF_THREADS = num;
     cutsDivisions.resize(NUM_OF_THREADS);
     cutsValues.resize(NUM_OF_THREADS);
@@ -40,10 +40,6 @@ GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> >& graph, MinCutFunc** 
                 cutsValues[i] = func[i]->minCut(contractedGraph, vertexMapping[st.first], vertexMapping[st.second]);
                 cutsDivisions[i] = func[i]->getSourceSide();
                 if(i != 0) return;
-                for(auto v : cutsDivisions[i]){
-                    cout<<v<<" ";
-                }
-                cout<<endl;
             });
         }
 
@@ -54,18 +50,12 @@ GomoryHuTree::GomoryHuTree(vector<unordered_map<int,int> >& graph, MinCutFunc** 
         int bestId = 0;
         int target = verticesInNodes[X.second].size()/2;
         int current = target<<2;
-        cout<<"cuts:\n";
         for(int i=0; i < NUM_OF_THREADS; ++i){
-            cout<<"\t"<<target<<" "<<current<<" "<<cutsDivisions[i].size()<<endl;
             if(current > target - cutsDivisions[i].size()){
                 bestId = i;
                 current = target - cutsDivisions[i].size();
             }
         }
-        for(auto v : cutsDivisions[bestId]){
-            cout<<v<<" ";
-        }
-        cout<<endl;
 
         splitRoot(X, cutsValues[bestId], cutsDivisions[bestId], superNodes, vertexMapping);
     }

@@ -19,7 +19,9 @@ vector<unordered_map<int,int> > wattStrogatzModel(int n, int k, int beta = 10){
     for(int i=0; i < n; ++i){
         for(int j= -k/2; j < k/2; j++){
             if((i+j + n)%n == i) continue;
-            out[i+1][(i+j + n)%n + 1] = max((int)distribution(generator), 1);
+            int weight = max((int)distribution(generator), 1);
+            out[i+1][(i+j + n)%n + 1] = weight;
+//            out[(i+j + n)%n + 1][i+1] = weight;
         }
     }
 

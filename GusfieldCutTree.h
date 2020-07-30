@@ -13,7 +13,7 @@ using namespace std;
 
 class GusfieldCutTree {
 public:
-    GusfieldCutTree(vector<unordered_map<int,int> >&, MinCutFunc*, int);
+    GusfieldCutTree(vector<unordered_map<int,int> >, MinCutFunc**, int);
 
     int getMinCut(int, int);
 

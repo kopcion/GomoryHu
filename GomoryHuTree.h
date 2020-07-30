@@ -21,7 +21,7 @@ using namespace std;
 
 class GomoryHuTree {
 public:
-    GomoryHuTree(vector<unordered_map<int,int> >&, MinCutFunc**, int num);
+    GomoryHuTree(vector<unordered_map<int,int> >, MinCutFunc**, int num);
 
     int getMinCut(int source, int target) {
         vector<bool> visited(cutTree.size(), false);

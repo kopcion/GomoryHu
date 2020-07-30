@@ -13,9 +13,9 @@ int PushRelabel::minCut(vector<unordered_map<int,int>> &graph, int s, int t) {
     target = t;
     preflow();
     count = 0;
-
+    int globalRelabelconstant = min((int)(graph.size()*graph.size()>>5), 100);
     while(!overflowingVertices.empty()){
-        if(count%(graph.size()*graph.size()) == 0) globalRelabel();
+        if(count%(globalRelabelconstant) == 0) globalRelabel();
         if(overflowingVertices.front() == source or overflowingVertices.front() == target){
             overflowingVertices.pop();
             continue;
@@ -38,13 +38,21 @@ void PushRelabel::preflow() {
 void PushRelabel::globalRelabel(){
     vector<int> dist(_graph.size(), -1);
     dist[target] = 0;
-    for(int i=1; i < _graph.size(); ++i){
-        cout<<"kappa\n";
-        if(dist[i] == -1) dfs(i, dist);
+
+    queue<int> queue;
+    queue.push(target);
+    while(!queue.empty()){
+        int u = queue.front(); queue.pop();
+
+        for(auto v : _graph[u]){
+            if(_graph[v.first][u] > 0 && dist[v.first] == -1){
+                dist[v.first] = dist[u] + 1;
+                queue.push(v.first);
+            }
+        }
     }
-    for(int i=1; i < _graph.size(); ++i){
-        cout<<height[i]<<" "<<dist[i]<<endl;
-        height[i] = dist[i];
+    for(int i=1; i < dist.size(); ++i){
+        height[i] = (dist[i] == -1) ? dist.size() : dist[i];
     }
 }
 
